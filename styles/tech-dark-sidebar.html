@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}}</title>
+<style>
+  :root {
+    --sidebar-bg: #1a1a2e;
+    --sidebar-hover: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --content-bg: #f8f9fc;
+    --card-bg: #ffffff;
+    --text-primary: #1e1e2f;
+    --text-secondary: #555568;
+    --text-muted: #8888a0;
+    --border: #e2e4ea;
+    --code-bg: #f0f2f8;
+    --code-border: #d8dce6;
+    --table-stripe: #f4f5fa;
+    --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    --radius: 8px;
+    --sidebar-w: 280px;
+    --transition: .2s ease;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; font-size: 15px; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Helvetica, Arial, sans-serif;
+    background: var(--content-bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+  .sidebar {
+    position: fixed; top: 0; left: 0;
+    width: var(--sidebar-w); height: 100vh;
+    background: var(--sidebar-bg); color: #ccc;
+    overflow-y: auto; z-index: 100;
+    display: flex; flex-direction: column;
+    scrollbar-width: thin; scrollbar-color: #333 transparent;
+  }
+  .sidebar::-webkit-scrollbar { width: 5px; }
+  .sidebar::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+  .sidebar-brand { padding: 28px 24px 20px; border-bottom: 1px solid rgba(255,255,255,.08); flex-shrink: 0; }
+  .sidebar-brand .logo { font-size: 1.35rem; font-weight: 700; color: #fff; letter-spacing: .5px; }
+  .sidebar-brand .logo span { color: var(--highlight); }
+  .sidebar-brand .tagline { font-size: .75rem; color: #777; margin-top: 4px; }
+  .sidebar nav { padding: 16px 0; flex: 1; }
+  .sidebar a {
+    display: block; padding: 8px 24px 8px 28px;
+    color: #aab; text-decoration: none; font-size: .88rem;
+    transition: all var(--transition); border-left: 3px solid transparent;
+  }
+  .sidebar a.lvl-2 { padding-left: 40px; font-size: .82rem; color: #8899aa; }
+  .sidebar a.lvl-3 { padding-left: 52px; font-size: .78rem; color: #778899; }
+  .sidebar a:hover, .sidebar a.active {
+    background: var(--sidebar-hover); color: #fff; border-left-color: var(--highlight);
+  }
+  .sidebar a .num {
+    display: inline-block; width: 26px;
+    color: var(--highlight); font-weight: 600; font-size: .8rem;
+  }
+  .main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; }
+  .content { max-width: 960px; margin: 0 auto; padding: 48px 48px 120px; }
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 8px; color: var(--sidebar-bg); }
+  .subtitle { font-size: 1rem; color: var(--text-muted); margin-bottom: 40px; }
+  h2 {
+    font-size: 1.45rem; font-weight: 700;
+    margin: 56px 0 20px; padding-bottom: 10px;
+    border-bottom: 2px solid var(--highlight);
+    color: var(--sidebar-bg); scroll-margin-top: 24px;
+  }
+  h3 { font-size: 1.15rem; font-weight: 600; margin: 32px 0 12px; color: var(--accent); scroll-margin-top: 24px; }
+  h4 { font-size: 1rem; font-weight: 600; margin: 24px 0 8px; color: var(--text-primary); }
+  p { margin-bottom: 14px; }
+  strong { font-weight: 600; }
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 4px; }
+  a { color: var(--accent); }
+  a:hover { color: var(--highlight); }
+  blockquote {
+    border-left: 4px solid var(--accent);
+    background: #e8eeff;
+    padding: 14px 20px;
+    margin: 16px 0 24px;
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--text-secondary);
+  }
+  blockquote p:last-child { margin-bottom: 0; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  img { max-width: 100%; height: auto; border-radius: var(--radius); box-shadow: var(--shadow); }
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: .88rem; background: var(--card-bg);
+    margin: 16px 0 24px; border-radius: var(--radius); overflow: hidden;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+  }
+  thead th {
+    background: var(--sidebar-bg); color: #fff;
+    font-weight: 600; padding: 12px 14px; text-align: left; white-space: nowrap;
+  }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--table-stripe); }
+  tbody tr:hover { background: #eef0f8; }
+  code {
+    font-family: "SF Mono", "Fira Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    font-size: .85em; background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    padding: 2px 6px; border-radius: 4px; color: var(--highlight);
+  }
+  pre {
+    background: #1e1e2f; color: #d4d4ea;
+    border-radius: var(--radius); padding: 20px 24px;
+    overflow-x: auto; margin: 16px 0 24px;
+    line-height: 1.6; font-size: .85rem; box-shadow: var(--shadow);
+  }
+  pre code { background: none; border: none; padding: 0; color: inherit; font-size: inherit; }
+  @media (max-width: 900px) {
+    .sidebar { width: 240px; }
+    .main { margin-left: 240px; }
+    .content { padding: 32px 24px 80px; }
+  }
+  @media (max-width: 700px) {
+    .sidebar { transform: translateX(-100%); transition: transform .3s ease; width: 280px; }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .content { padding: 24px 16px 80px; }
+    .menu-toggle { display: flex; }
+  }
+  .menu-toggle {
+    display: none; position: fixed; top: 12px; left: 12px;
+    width: 40px; height: 40px; background: var(--sidebar-bg); color: #fff;
+    border: none; border-radius: 8px;
+    align-items: center; justify-content: center;
+    font-size: 1.2rem; cursor: pointer; z-index: 200;
+  }
+  .back-to-top {
+    position: fixed; bottom: 24px; right: 24px;
+    width: 42px; height: 42px; background: var(--highlight); color: #fff;
+    border: none; border-radius: 50%; font-size: 1.2rem; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(233,69,96,.3);
+    opacity: 0; transition: opacity .3s; z-index: 50;
+  }
+  .back-to-top.visible { opacity: 1; }
+</style>
+</head>
+<body>
+<button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">&#9776;</button>
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">{{TITLE}}</div>
+    <div class="tagline">{{SUBTITLE}}</div>
+  </div>
+  <nav>
+    {{TOC}}
+  </nav>
+</aside>
+<div class="main">
+<div class="content">
+{{CONTENT}}
+</div>
+</div>
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+<script>
+  const btn = document.querySelector('.back-to-top');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+  const links = document.querySelectorAll('.sidebar a');
+  const sections = [...links].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY + 80;
+    let current = sections[0];
+    for (const s of sections) { if (s.offsetTop <= y) current = s; }
+    links.forEach(a => a.classList.toggle('active', current && a.getAttribute('href') === '#' + current.id));
+  });
+</script>
+</body>
+</html>
