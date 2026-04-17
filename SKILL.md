@@ -26,11 +26,12 @@ description: 把 Markdown 文件转换成带精美样式的单文件 HTML（md-c
 
 | 用户说法 | 怎么做 |
 |---------|-------|
-| "把 X.md 转成 html"（未指定风格） | 先跑**预览流程**让用户选风格 |
-| "用 tech-dark / notion / clean 风格转 X.md" | 直接跑**转换流程** |
+| "把 X.md 转成 html"（未指定风格） | 走**流程 B · 快速模式**（给固定样例图路径，不 Read） |
+| "用 tech-dark / notion / clean 风格转 X.md" | 直接走**流程 A** |
 | "我要之前那个风格 / 深色侧栏那个" | 直接用 `tech-dark-sidebar` |
-| "美化这个 md / 文档网页化" | 默认先预览 |
-| "看看有哪些风格 / 预览" | 只跑**预览流程** |
+| "美化这个 md / 文档网页化" | 走**流程 B · 快速模式** |
+| "看看有哪些风格 / 预览" | 走**流程 B · 快速模式** |
+| "用我的文档预览 / 看我这篇长啥样 / 真实预览" | 走**流程 B · 真实模式**（跑 preview.py） |
 
 ---
 
@@ -56,49 +57,67 @@ python3 ~/.cursor/skills/md-couture/scripts/convert.py \
 
 ## 流程 B：预览选择（未知风格）
 
-需要让用户看到 3 种风格的实际效果再选。**优先在 Cursor 聊天里贴 PNG 给用户看**，而不是让用户开浏览器。
+**两种模式**，默认走**快速模式**（极省 token）。
+
+---
+
+### 流程 B1 · 快速模式（默认，~500 token）
+
+**不跑任何脚本，不 Read 任何图片**。直接引用 skill 自带的 3 张固定样例截图路径（基于通用 `demo.md` 渲染）。
+
+这 3 张图在仓库里固定存在：
+
+```
+~/.cursor/skills/md-couture/assets/screenshots/thumb-tech-dark-sidebar.png
+~/.cursor/skills/md-couture/assets/screenshots/thumb-clean-minimal.png
+~/.cursor/skills/md-couture/assets/screenshots/thumb-notion.png
+```
+
+**AI 必须严格按以下模板输出**（不要加别的，不要 Read）：
+
+```markdown
+3 种主题预览（点下方路径 cmd+click 打开放大看）：
+
+### ① `tech-dark-sidebar` — 深色导航侧栏 + 红色高亮 + 卡片式内容
+📂 `/Users/<USER>/.cursor/skills/md-couture/assets/screenshots/thumb-tech-dark-sidebar.png`
+**适合**：技术文档、方法论、长文导读
+
+### ② `clean-minimal` — GitHub 风，白底、窄栏、克制
+📂 `/Users/<USER>/.cursor/skills/md-couture/assets/screenshots/thumb-clean-minimal.png`
+**适合**：README、说明文档、博客
+
+### ③ `notion` — 暖色调、柔和阴影、封面条
+📂 `/Users/<USER>/.cursor/skills/md-couture/assets/screenshots/thumb-notion.png`
+**适合**：笔记、随笔、知识整理
+
+---
+选哪个？告诉我 `tech-dark` / `clean` / `notion`，或 `第一个` / `第二个` / `第三个` 即可。
+如果想看**用你自己文档内容**渲染的真实预览，说一声"用我文档预览"。
+```
+
+**关键规则**：
+- 路径**一定用反引号包起来**（Cursor 会变成 cmd+click 可点文件链接）
+- 路径里的 `<USER>` 要替换成真实用户名（从 `~` 展开或 `$HOME` 取）
+- **绝对不要 Read 这 3 张图**（这是快速模式的全部意义，Read 就会多花 ~5K token）
+- 不要跑 `preview.py`（除非用户明确要求真实预览）
+
+---
+
+### 流程 B2 · 真实模式（用户明确要求时才走，~5-10K token）
+
+触发条件：用户说"用我文档预览"、"看我这篇长啥样"、"真实渲染看看"、"用我内容渲染出来看看" 等。
 
 ```bash
 python3 ~/.cursor/skills/md-couture/scripts/preview.py <输入.md>
 ```
 
-脚本会在 **skill 的缓存目录**（不污染用户工作区）生成：
+脚本会在 `~/.cursor/skills/md-couture/.cache/<hash>-<md名>/` 下生成 demo HTML 和 per-doc 截图，每次运行会清理 7 天以上未访问的旧缓存。
 
-```
-~/.cursor/skills/md-couture/.cache/<hash>-<md名>/
-├── index.html               # 风格选择网格页（备用，浏览器打开用）
-├── <style>.html × N         # 每种风格的完整 demo
-└── thumb-<style>.png × N    # 每种风格的首屏截图（给 AI 贴图用）
-```
+真实模式下，AI 才 Read 生成的 `thumb-*.png` 并贴进对话，让用户看到自己文档的实际渲染效果。输出格式同快速模式，只是路径改成缓存目录里的。
 
-- `<hash>` = md 绝对路径的 sha1 前 10 位（同一文件每次路径稳定，会覆盖旧缓存）
-- 每次运行会清理 `.cache` 下 **> 7 天未访问** 的其他子目录
-- 脚本会打印 `thumb-*.png` 的完整路径，AI **直接从输出里取路径并 Read**
+---
 
-**AI 必须严格按以下模板输出**（顺序不可乱、三个元素都不能省）：
-
-对每一种风格，按下面的结构生成一个 block：
-
-```
-### ① <风格 id> — <一句话特点>
-
-[用 Read 工具读取 thumb-<风格id>.png ← 这一步让图片渲染进对话]
-
-📂 `<thumb PNG 的绝对路径>`
-```
-
-第三行的**绝对路径用反引号包住**—— Cursor 会把它变成可 cmd+click 打开的文件链接，
-这样用户既能在对话里看缩略图，也能点击路径用系统图片查看器放大细看。
-
-全部三种风格都贴完后，结尾一句：
-
-> 告诉我选哪个（如 "tech-dark" / "第一个" / "notion"），我就生成正式文件。
-
-**绝对不要**只输出文字描述而不贴图/不给路径 —— 这是这个 skill 存在的唯一意义。
-**绝对不要**让用户"在浏览器里打开 index.html"—— 违背设计意图。
-只有在脚本输出显示"未找到 Chrome"时，才退回到让用户开 index.html。
-
-用户选定后，跑流程 A 生成最终文件（默认输出到原 md 同目录、同名 `.html`）。缓存无需手动清理，skill 自动管理。
+用户选定风格后，一律跑流程 A 生成最终 HTML。缓存和样例截图都不用手动管理。
 
 ---
 
