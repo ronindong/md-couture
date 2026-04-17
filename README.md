@@ -3,6 +3,16 @@
 > Stylish Markdown — zero config. 把 Markdown 转成带精美样式的**单文件 HTML**，原生支持 3 种主题，可与 Cursor Skill 对话式预览 / 选主题。
 
 <p align="center">
+  <a href="https://cursor.com/marketplace"><img src="https://img.shields.io/badge/Cursor-Marketplace-7c3aed?logo=cursor&logoColor=white" alt="Cursor Marketplace" /></a>
+  <a href="https://github.com/ronindong/md-couture/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License" /></a>
+  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="version 1.0.0" />
+</p>
+
+<p align="center">
+  <img src="assets/icon.png" width="120" alt="md-couture" />
+</p>
+
+<p align="center">
   <img src="assets/screenshots/thumb-tech-dark-sidebar.png" width="720" alt="Tech Dark Sidebar preview" />
 </p>
 
@@ -53,7 +63,15 @@ GitHub 风，白底窄栏克制。适合 **README、说明文档、博客**。
 
 ## 🚀 安装
 
-### 方式一：作为 Cursor Skill（推荐）
+### 方式一：Cursor Marketplace（官方推荐）
+
+1. 打开 **Cursor Settings → Plugins**
+2. 搜索 `md-couture` 并点 Install
+3. 跟着提示装好 Python 依赖即可：`pip3 install --user markdown pygments`
+
+> 也可以直接访问 [cursor.com/marketplace](https://cursor.com/marketplace) 找到这个 plugin。
+
+### 方式二：Git clone（开发 / 尝鲜）
 
 ```bash
 git clone https://github.com/ronindong/md-couture.git ~/.cursor/skills/md-couture

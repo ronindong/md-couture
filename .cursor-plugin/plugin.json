@@ -1,0 +1,33 @@
+{
+  "name": "md-couture",
+  "displayName": "MD Couture",
+  "version": "1.0.0",
+  "description": "Convert Markdown files into beautifully styled, self-contained HTML. Pick from 3 built-in themes (Tech Dark Sidebar / Clean Minimal / Notion) through an interactive preview directly in Cursor chat. Zero CDN, inline CSS, auto TOC with Chinese slug support.",
+  "author": {
+    "name": "Ronin"
+  },
+  "publisher": "Ronin",
+  "homepage": "https://github.com/ronindong/md-couture",
+  "repository": "https://github.com/ronindong/md-couture",
+  "license": "MIT",
+  "logo": "assets/icon.png",
+  "keywords": [
+    "markdown",
+    "html",
+    "documentation",
+    "converter",
+    "styled-html",
+    "export",
+    "themes",
+    "toc"
+  ],
+  "category": "productivity",
+  "tags": [
+    "documentation",
+    "productivity",
+    "markdown",
+    "export",
+    "themes"
+  ],
+  "skills": "./"
+}
