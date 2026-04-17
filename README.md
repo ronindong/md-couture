@@ -56,7 +56,7 @@ GitHub 风，白底窄栏克制。适合 **README、说明文档、博客**。
 ### 方式一：作为 Cursor Skill（推荐）
 
 ```bash
-git clone https://github.com/<your-username>/md-couture.git ~/.cursor/skills/md-couture
+git clone https://github.com/ronindong/md-couture.git ~/.cursor/skills/md-couture
 pip3 install --user markdown pygments
 ```
 
@@ -67,7 +67,7 @@ pip3 install --user markdown pygments
 ### 方式二：作为独立命令行工具
 
 ```bash
-git clone https://github.com/<your-username>/md-couture.git
+git clone https://github.com/ronindong/md-couture.git
 cd md-couture
 pip3 install --user markdown pygments
 python3 scripts/convert.py examples/demo.md --style tech-dark-sidebar
