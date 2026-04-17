@@ -13,7 +13,7 @@
 </p>
 
 <p align="center">
-  <img src="assets/screenshots/thumb-tech-dark-sidebar.png" width="720" alt="Tech Dark Sidebar preview" />
+  <img src="skills/md-couture/assets/screenshots/thumb-tech-dark-sidebar.png" width="720" alt="Tech Dark Sidebar preview" />
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 ### ① `tech-dark-sidebar` —— 默认主题
 
 <p align="center">
-  <img src="assets/screenshots/thumb-tech-dark-sidebar.png" width="800" />
+  <img src="skills/md-couture/assets/screenshots/thumb-tech-dark-sidebar.png" width="800" />
 </p>
 
 适合**技术文档、方法论、长文导读**。深色导航侧栏自动编号，滚动时高亮当前章节。
@@ -46,7 +46,7 @@
 ### ② `clean-minimal`
 
 <p align="center">
-  <img src="assets/screenshots/thumb-clean-minimal.png" width="800" />
+  <img src="skills/md-couture/assets/screenshots/thumb-clean-minimal.png" width="800" />
 </p>
 
 GitHub 风，白底窄栏克制。适合 **README、说明文档、博客**。
@@ -54,7 +54,7 @@ GitHub 风，白底窄栏克制。适合 **README、说明文档、博客**。
 ### ③ `notion`
 
 <p align="center">
-  <img src="assets/screenshots/thumb-notion.png" width="800" />
+  <img src="skills/md-couture/assets/screenshots/thumb-notion.png" width="800" />
 </p>
 
 暖色封面条 + 柔和排版。适合**笔记、随笔、知识整理**。
@@ -74,7 +74,8 @@ GitHub 风，白底窄栏克制。适合 **README、说明文档、博客**。
 ### 方式二：Git clone（开发 / 尝鲜）
 
 ```bash
-git clone https://github.com/ronindong/md-couture.git ~/.cursor/skills/md-couture
+git clone https://github.com/ronindong/md-couture.git ~/dev/md-couture
+ln -s ~/dev/md-couture/skills/md-couture ~/.cursor/skills/md-couture
 pip3 install --user markdown pygments
 ```
 
@@ -86,7 +87,7 @@ pip3 install --user markdown pygments
 
 ```bash
 git clone https://github.com/ronindong/md-couture.git
-cd md-couture
+cd md-couture/skills/md-couture
 pip3 install --user markdown pygments
 python3 scripts/convert.py examples/demo.md --style tech-dark-sidebar
 ```
@@ -142,7 +143,7 @@ python3 scripts/preview.py input.md
 | `{{TOC_BLOCK}}` | 内嵌 TOC 卡片 HTML |
 | `{{CONTENT}}` | 主体 HTML |
 
-然后在 `scripts/convert.py::STYLE_PRIORITY` 里把新主题 id 加到顺序表中：
+然后在 `skills/md-couture/scripts/convert.py::STYLE_PRIORITY` 里把新主题 id 加到顺序表中：
 
 ```python
 STYLE_PRIORITY = ["tech-dark-sidebar", "clean-minimal", "notion", "your-new-theme"]
@@ -155,21 +156,27 @@ STYLE_PRIORITY = ["tech-dark-sidebar", "clean-minimal", "notion", "your-new-them
 ## 🗂 项目结构
 
 ```
-md-couture/
-├── SKILL.md                    # Cursor Skill 指令文件
-├── README.md                   # 本文档
+md-couture/                         # Cursor Plugin 根目录
+├── .cursor-plugin/
+│   └── plugin.json                 # Marketplace manifest
+├── README.md
 ├── LICENSE
-├── scripts/
-│   ├── convert.py              # 主转换器
-│   └── preview.py              # 多主题预览 + PNG 截图
-├── styles/
-│   ├── tech-dark-sidebar.html
-│   ├── clean-minimal.html
-│   └── notion.html
-├── examples/
-│   └── demo.md                 # 样例 md
-└── assets/
-    └── screenshots/            # README 用的主题截图
+├── assets/
+│   └── icon.png                    # Plugin 图标
+└── skills/
+    └── md-couture/                 # 实际的 skill 内容
+        ├── SKILL.md                # Cursor Skill 指令文件
+        ├── scripts/
+        │   ├── convert.py          # 主转换器
+        │   └── preview.py          # 多主题预览 + PNG 截图
+        ├── styles/
+        │   ├── tech-dark-sidebar.html
+        │   ├── clean-minimal.html
+        │   └── notion.html
+        ├── examples/
+        │   └── demo.md             # 样例 md
+        └── assets/
+            └── screenshots/        # 主题截图
 ```
 
 ---
